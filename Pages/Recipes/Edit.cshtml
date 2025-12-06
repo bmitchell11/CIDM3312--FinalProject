@@ -1,0 +1,88 @@
+@page
+@model CIDM3312__FinalProject.Pages_Recipes.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Recipe</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Recipe.RecipeID" />
+            <div class="form-group">
+                
+                <label asp-for="Recipe.Title" class="control-label"></label>
+                <input asp-for="Recipe.Title" class="form-control" />
+                <span asp-validation-for="Recipe.Title" class="text-danger"></span>
+            </div>
+
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        @if (Model.Ingredients != null && Model.Recipe != null)
+        {
+            <table>
+                <tr>
+
+                @{
+                    var check = "";
+                    int cnt = 0;
+                    foreach (var ingredient in Model.Ingredients)
+                    {
+                        if (cnt % 2 == 0)
+                        {
+                            @:</tr><tr>
+                        }
+                        check = "";
+                        if (Model.Recipe.RecipeIngredients!.Any(ri => ri.IngredientID == ingredient.IngredientID))
+                        {
+                            check = "checked";
+                        }
+                        <td>
+                            <input class="form-check-input me-1" type="checkbox" name="selectedIngredients" id="@("check" + @ingredient.IngredientID)" value="@ingredient.IngredientID" @check>
+                            <label class="form-check-label" for="@("check" + @ingredient.IngredientID)">@ingredient.Name</label>
+                        </td>
+                        cnt++;
+                    }
+                    @:</tr>
+                }
+            </table>
+            }
+    </div>
+</div>
+            <div class="form-group">
+                
+                <label asp-for="Recipe.Instructions" class="control-label"></label>
+                <input asp-for="Recipe.Instructions" class="form-control" />
+                <span asp-validation-for="Recipe.Instructions" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                
+                <label asp-for="Recipe.CookTime" class="control-label"></label>
+                <input asp-for="Recipe.CookTime" class="form-control" />
+                <span asp-validation-for="Recipe.CookTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                
+                <label asp-for="Recipe.DateAdded" class="control-label"></label>
+                <input asp-for="Recipe.DateAdded" class="form-control" />
+                <span asp-validation-for="Recipe.DateAdded" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
